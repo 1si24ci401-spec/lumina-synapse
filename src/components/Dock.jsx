@@ -26,7 +26,8 @@ export default function Dock({
   isHistoryOpen,
   isModelSelectorOpen,
   activeModelName,
-  onLogoutRequest
+  onLogoutRequest,
+  isHoneypot = false
 }) {
   const [cypherBackendOnline, setCypherBackendOnline] = useState(true);
   const [zenithBackendOnline, setZenithBackendOnline] = useState(true);
@@ -208,6 +209,21 @@ export default function Dock({
     }
   ];
 
+  // Honeypot mode: remove sensitive tools
+  // (admin-panel, autonomous-agent, zenith-mesh, cypher-shield, neo4j-graph, forge)
+  const honeypotHiddenIds = new Set([
+    'admin-panel',      // Admin Panel (ShieldCheck)
+    'autonomous-agent', // last 2nd
+    'zenith-mesh',      // last 3rd
+    'cypher-shield',    // last 4th
+    'neo4j-graph',      // last 5th
+    'forge',            // last 7th
+  ]);
+
+  const visibleDockItems = isHoneypot
+    ? dockItems.filter((item) => !honeypotHiddenIds.has(item.id))
+    : dockItems;
+
   return (
     <aside className="fixed left-3 sm:left-5 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center">
       <motion.nav 
@@ -216,7 +232,7 @@ export default function Dock({
         transition={{ type: 'spring', damping: 20, stiffness: 200 }}
         className="flex flex-col items-center gap-2 p-2 sm:p-2.5 rounded-3xl bg-white/90 backdrop-blur-xl border border-slate-200/90 shadow-xl shadow-slate-900/10"
       >
-        {dockItems.map((item) => {
+        {visibleDockItems.map((item) => {
           const Icon = item.icon;
           const isActive = item.isActive;
           const isGlowing = item.isGlowing;

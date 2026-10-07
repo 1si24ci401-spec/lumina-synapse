@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ALL_MODELS, DEFAULT_STANDARD_CHATS, DEFAULT_MIXER_CHATS } from '../data/modelsData'
 import UserDashboard from './UserDashboard'
 import AdminPanel from './AdminPanel'
@@ -53,6 +53,13 @@ export default function SynapseOS({
 
   const activeMainModel = ALL_MODELS.find((m) => m.id === activeMainModelId) || ALL_MODELS[0]
 
+  // If in honeypot decoy mode, ensure navigation cannot open the removed sensitive studios
+  useEffect(() => {
+    if (isHoneypot && ['admin-panel', 'forge', 'neo4j-graph', 'cypher-shield', 'zenith-mesh', 'autonomous-agent'].includes(activeView)) {
+      setActiveView('new-chat')
+    }
+  }, [isHoneypot, activeView])
+
   const handleNewChat = (tab = 'standard') => {
     const newId = `${tab === 'mixer' ? 'mix-' : 'std-'}${Date.now()}`
     setActiveChatId(newId)
@@ -93,6 +100,7 @@ export default function SynapseOS({
       */}
       <Dock
         activeView={activeView}
+        isHoneypot={isHoneypot}
         onSelectView={(view: any) => {
           setActiveView(view)
           setIsHistoryOpen(false)
