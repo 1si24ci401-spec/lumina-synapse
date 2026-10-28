@@ -13,7 +13,7 @@ from app.database.models import Target
 
 router = APIRouter()
 
-LAB_TARGET_URL = os.getenv("LAB_TARGET_URL", "http://vulnerable-app:8080")
+LAB_TARGET_URL = os.getenv("SECURITY_LAB_URL", os.getenv("LAB_TARGET_URL", "http://vulnerable-app:8080"))
 
 
 class TargetCreate(BaseModel):

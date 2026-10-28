@@ -1,0 +1,95 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "app": {
+      "root": ".",
+      "framework": "vite"
+    },
+    "backend": {
+      "root": "ai-autonomous-agent/quantumshield-ai/backend",
+      "framework": "fastapi",
+      "bindings": [
+        {
+          "type": "service",
+          "service": "security-lab",
+          "format": "url",
+          "env": "SECURITY_LAB_URL"
+        }
+      ]
+    },
+    "frontend": {
+      "root": "ai-autonomous-agent/quantumshield-ai/frontend",
+      "framework": "vite"
+    },
+    "security-lab": {
+      "root": "ai-autonomous-agent/quantumshield-ai/security-lab",
+      "framework": "flask"
+    },
+    "cypher-shield": {
+      "root": "cypher-shield",
+      "framework": "fastapi",
+      "bindings": [
+        {
+          "type": "service",
+          "service": "zenith-mesh",
+          "format": "url",
+          "env": "ZENITH_MESH_URL"
+        }
+      ]
+    },
+    "client": {
+      "root": "cypher-shield/client",
+      "framework": "vite"
+    },
+    "synapse-os-repo": {
+      "root": "synapse-os-repo",
+      "framework": "vite"
+    },
+    "zenith-mesh": {
+      "root": "zenith-mesh",
+      "framework": "fastapi"
+    },
+    "client-2": {
+      "root": "zenith-mesh/client",
+      "framework": "vite"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/agent-api/(.*)",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "source": "/cypher/(.*)",
+      "destination": {
+        "service": "cypher-shield"
+      }
+    },
+    {
+      "source": "/zenith/(.*)",
+      "destination": {
+        "service": "zenith-mesh"
+      }
+    },
+    {
+      "source": "/security-lab/(.*)",
+      "destination": {
+        "service": "security-lab"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "app"
+      }
+    }
+  ]
+}

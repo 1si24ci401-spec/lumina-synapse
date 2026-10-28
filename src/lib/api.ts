@@ -1,7 +1,10 @@
 /* ─── API Configuration ───────────────────────────────────── */
-/* Grok Model Option (xAI) */
-export const GROK_API_KEY = (import.meta.env.VITE_GROK_API_KEY as string | undefined) ?? ''
-export const GROK_API_BASE = 'https://api.x.ai/v1'
+/* Grok / Groq Model Option */
+export const GROQ_API_KEY = (import.meta.env.VITE_GROQ_API_KEY as string | undefined) ?? ''
+export const GROQ_API_BASE = 'https://api.groq.com/openai/v1'
+export const GROQ_MODEL = (import.meta.env.VITE_GROQ_MODEL as string | undefined) ?? 'qwen/qwen3.8-27b'
+export const GROK_API_KEY = (import.meta.env.VITE_GROK_API_KEY as string | undefined) ?? GROQ_API_KEY
+export const GROK_API_BASE = GROK_API_KEY.startsWith('gsk_') ? GROQ_API_BASE : 'https://api.x.ai/v1'
 
 /* Secondary OmniRoute Neural Gateway API (for operating all other models) */
 export const OMNIROUTE_API_KEY = (import.meta.env.VITE_OMNIROUTE_API_KEY as string | undefined) ?? ''
@@ -145,8 +148,9 @@ export async function* streamCompletion(
     })
     res = await fetchOllama(requestBody)
   } else if (useGrok) {
-    /* 2. Grok Model Option -> xAI API */
-    const grokModel = modelId === 'grok-3-mini' ? 'grok-3-mini' : 'grok-3'
+    /* 2. Grok Model Option -> Groq or xAI API */
+    const isGroq = GROK_API_KEY.startsWith('gsk_')
+    const grokModel = isGroq ? GROQ_MODEL : (modelId === 'grok-3-mini' ? 'grok-3-mini' : 'grok-3')
     res = await fetch(`${GROK_API_BASE}/chat/completions`, {
       method: 'POST',
       headers: {

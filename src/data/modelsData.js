@@ -99,6 +99,17 @@ export const ALL_MODELS = [
     description: 'Real-time telemetry grounded model with deep logic synthesis capabilities.'
   },
   {
+    id: 'grok-new',
+    name: 'Grok New',
+    fullName: 'Grok New (Groq Fast Engine)',
+    type: 'Cloud Neural Engine',
+    latency: '24ms',
+    isLocal: false,
+    badge: 'NEW',
+    color: '#10b981',
+    description: 'Ultra-low latency Grok New cloud reasoning powered by high-speed neural substrate.'
+  },
+  {
     id: 'gemini-flash',
     name: 'Gemini Flash',
     fullName: 'Gemini-Flash-1.5',

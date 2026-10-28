@@ -195,7 +195,9 @@ def calculate_qre_cost(k_rank: Optional[int] = None, t_gate_depth: int = 154000)
 # 4. DYNAMIC LATTICE PARAMETER RATCHETING (Section 4.2 of IEEE Paper)
 # =====================================================================
 
-def trigger_lattice_ratchet(force_escalate: bool = False, substrate_endpoint: str = "http://127.0.0.1:9944") -> Dict[str, Any]:
+def trigger_lattice_ratchet(force_escalate: bool = False, substrate_endpoint: Optional[str] = None) -> Dict[str, Any]:
+    if substrate_endpoint is None:
+        substrate_endpoint = os.getenv("ZENITH_MESH_URL", "http://127.0.0.1:9944")
     """
     Executes Dynamic Lattice Parameter Ratcheting (Section 4.2 & Figure 2):
     1. Zeroizes active symmetric key in memory (RAM scrub 0x00).

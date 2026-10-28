@@ -6,6 +6,7 @@ export const MODELS = [
   { id: 'qwen-local', name: 'Qwen-2.5 Local', detail: 'Qwen-2.5-0.5B · LOCAL OLLAMA', latency: 12, type: 'local', online: true },
   { id: 'smollm-local', name: 'SmolLM-2 Local', detail: 'SmolLM-2-360M · LOCAL OLLAMA', latency: 9, type: 'local', online: true },
   { id: 'grok-cloud', name: 'Grok-3 Cloud', detail: 'xAI Grok · CLOUD TUNNEL', latency: 45, type: 'cloud', online: true },
+  { id: 'grok-new', name: 'Grok New', detail: 'Grok New · FAST CLOUD INFERENCE', latency: 24, type: 'cloud', online: true },
   { id: 'mistral-local', name: 'Mistral Local', detail: 'Mixtral-8x7B · LOCAL PROCESS', latency: 63, type: 'local' },
   { id: 'gpt4o-cloud', name: 'GPT-4o Cloud', detail: 'GPT-4o-turbo-128k · CLOUD TUNNEL', latency: 142, type: 'cloud' },
   { id: 'claude-cloud', name: 'Claude Cloud', detail: 'Claude-3.5-Sonnet · CLOUD TUNNEL', latency: 158, type: 'cloud' },

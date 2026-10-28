@@ -98,6 +98,8 @@ const CYPHER_URL = getEnvVar('NEXT_PUBLIC_CYPHER_SHIELD_URL', getEnvVar('VITE_CY
 const ZENITH_URL = getEnvVar('NEXT_PUBLIC_ZENITH_MESH_URL', getEnvVar('VITE_ZENITH_MESH_URL', 'http://127.0.0.1:9944/ledger/commit'));
 const OMNIROUTE_URL = getEnvVar('OMNIROUTE_BASE_URL', getEnvVar('VITE_OMNIROUTE_BASE_URL', 'http://localhost:20128/v1'));
 const OMNIROUTE_KEY = getEnvVar('OMNIROUTE_API_KEY', getEnvVar('VITE_OMNIROUTE_API_KEY', 'omniroute-local-key'));
+const GROQ_KEY = getEnvVar('VITE_GROQ_API_KEY', '');
+const GROQ_MODEL = getEnvVar('VITE_GROQ_MODEL', getEnvVar('VITE_FALLBACK_MODEL', 'qwen/qwen3.8-27b'));
 const DEFAULT_COMBO = getEnvVar('FORGE_DEFAULT_COMBO_MODEL', getEnvVar('VITE_FORGE_DEFAULT_COMBO_MODEL', 'auto'));
 
 // Utility: Pseudo-random hex
@@ -561,10 +563,49 @@ async function executeStage3Chat(
 
   const systemContent = `You are ${model || 'Synapse-OS'}, an authoritative sovereign intelligence mesh kernel. Provide rigorous, precise, highly informative answers.`;
 
-  onLog(`[Synapse-OS L2] Routing query to local Ollama inference engine (${chosenModel})...`);
+  const isGrokModel = (model || '').toLowerCase().includes('grok') || model === 'Grok New';
+  if (isGrokModel && GROQ_KEY) {
+    onLog(`[Synapse-OS L2] Routing query to Groq Cloud API (${GROQ_MODEL}) with Grok New authorization...`);
+    try {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), 8000);
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${GROQ_KEY}`
+        },
+        body: JSON.stringify({
+          model: GROQ_MODEL,
+          messages: [
+            { role: 'system', content: systemContent },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.7
+        }),
+        signal: controller.signal
+      });
+      clearTimeout(id);
+      if (res.ok) {
+        const data = await res.json();
+        const content = data.choices?.[0]?.message?.content;
+        if (content && content.trim().length > 0) {
+          rawText = content.trim();
+          onLog(`[Synapse-OS L2] Grok New live inference complete (${rawText.length} chars).`);
+        }
+      }
+    } catch (err: any) {
+      onLog(`[Synapse-OS L2] Grok New inference notice: ${err?.message || err}`);
+    }
+  }
+
+  if (!rawText && !isGrokModel) {
+    onLog(`[Synapse-OS L2] Routing query to local Ollama inference engine (${chosenModel})...`);
+  }
 
   for (const modelToUse of modelsToTry) {
     if (rawText) break;
+    if (isGrokModel) break;
     for (const ep of ollamaEndpoints) {
       try {
         const controller = new AbortController();
