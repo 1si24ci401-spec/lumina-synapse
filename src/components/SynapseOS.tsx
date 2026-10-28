@@ -37,7 +37,7 @@ export default function SynapseOS({
 
   // Navigation views: 'new-chat' | 'model-mixer' | 'forge' | 'admin-panel' | 'matrix' | 'neo4j-graph' | 'cypher-shield' | 'zenith-mesh' | 'autonomous-agent'
   const [activeView, setActiveView] = useState<'new-chat' | 'model-mixer' | 'forge' | 'admin-panel' | 'matrix' | 'neo4j-graph' | 'cypher-shield' | 'zenith-mesh' | 'autonomous-agent'>('new-chat')
-  const [activeMainModelId, setActiveMainModelId] = useState(propActiveModel || 'llama-3-local')
+  const [activeMainModelId, setActiveMainModelId] = useState(propActiveModel || 'grok-new')
   const [fusionPair, setFusionPair] = useState<[string, string]>(['llama-3-local', 'gpt-4o-cloud'])
 
   // History state separation

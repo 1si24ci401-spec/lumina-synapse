@@ -14,7 +14,7 @@ export default function App() {
   const [isHoneypot, setIsHoneypot] = useState(false)
   const [auditOpen, setAuditOpen] = useState(false)
   const [meshFlowOpen, setMeshFlowOpen] = useState(false)
-  const [activeModel, setActiveModel] = useState('synapse-free')
+  const [activeModel, setActiveModel] = useState('grok-new')
 
   async function handleSignOut() {
     await supabase.auth.signOut()

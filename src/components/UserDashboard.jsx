@@ -35,7 +35,7 @@ export default function UserDashboard({
   setActiveChatId,
   isGraphOpen,
   setIsGraphOpen,
-  activeMainModelId = 'llama-3-local',
+  activeMainModelId = 'grok-new',
   onOpenModelSelector,
   fusionPair = ['llama-3-local', 'gpt-4o-cloud'],
   onOpenFusionModal,

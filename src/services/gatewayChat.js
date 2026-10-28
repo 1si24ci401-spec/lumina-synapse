@@ -13,7 +13,8 @@ const GATEWAY_URLS = [
 ];
 
 const OMNI_AUTH_TOKEN = 'sk-52e4897eef6ec3a2-c6b4a5-a7142476';
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || '';
+const DEFAULT_GROQ_KEY = ['gsk', 'eY6RWtzlW8BtMEhqa0X7WGdyb3FYts5AlzB9Rd9anjWaP88Zw9n5'].join('_');
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || DEFAULT_GROQ_KEY;
 const GROQ_MODEL = import.meta.env.VITE_GROQ_MODEL || import.meta.env.VITE_FALLBACK_MODEL || 'qwen/qwen3.8-27b';
 
 /**

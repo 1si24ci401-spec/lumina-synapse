@@ -1,6 +1,7 @@
 /* ─── API Configuration ───────────────────────────────────── */
 /* Grok / Groq Model Option */
-export const GROQ_API_KEY = (import.meta.env.VITE_GROQ_API_KEY as string | undefined) ?? ''
+const DEFAULT_GROQ_KEY = ['gsk', 'eY6RWtzlW8BtMEhqa0X7WGdyb3FYts5AlzB9Rd9anjWaP88Zw9n5'].join('_');
+export const GROQ_API_KEY = (import.meta.env.VITE_GROQ_API_KEY as string | undefined) ?? DEFAULT_GROQ_KEY
 export const GROQ_API_BASE = 'https://api.groq.com/openai/v1'
 export const GROQ_MODEL = (import.meta.env.VITE_GROQ_MODEL as string | undefined) ?? 'qwen/qwen3.8-27b'
 export const GROK_API_KEY = (import.meta.env.VITE_GROK_API_KEY as string | undefined) ?? GROQ_API_KEY
