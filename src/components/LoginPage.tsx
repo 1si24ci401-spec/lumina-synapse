@@ -93,11 +93,17 @@ export default function LoginPage({
         let uid = 'usr_' + Math.random().toString(36).slice(2, 10)
         try {
           const { data, error: err } = await supabase.auth.signUp({ email, password })
-          if (!err && data?.user?.id) {
+          if (err) {
+            console.warn('[Supabase SignUp]', err.message)
+            if (err.message.toLowerCase().includes('already registered')) {
+              setError('An account with this email is already registered. Please sign in.')
+              return
+            }
+          } else if (data?.user?.id) {
             uid = data.user.id
           }
-        } catch {
-          /* offline fallback */
+        } catch (e: any) {
+          console.warn('[Supabase SignUp Error]', e?.message)
         }
 
         // Generate encrypted keycode
@@ -140,13 +146,16 @@ export default function LoginPage({
 
       // Tab is SIGNIN: Check credentials, then advance to Step 2: Keyfile verification
       let uid = ''
+      let authError: string | null = null
       try {
         const { data, error: err } = await supabase.auth.signInWithPassword({ email, password })
         if (!err && data?.user?.id) {
           uid = data.user.id
+        } else if (err) {
+          authError = err.message
         }
-      } catch {
-        /* fallback check local profile */
+      } catch (e: any) {
+        authError = e?.message || null
       }
 
       const localProfileRaw = localStorage.getItem('aegis_profile_' + email.toLowerCase().trim())
@@ -155,6 +164,11 @@ export default function LoginPage({
           const p = JSON.parse(localProfileRaw)
           uid = p.id
         } catch {}
+      }
+
+      if (!uid && authError && authError.toLowerCase().includes('invalid login credentials') && !localProfileRaw) {
+        setError('Invalid login credentials. Please check your email and password.')
+        return
       }
 
       if (!uid) {
