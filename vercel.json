@@ -37,7 +37,7 @@
         }
       ]
     },
-    "client": {
+    "cypher-client": {
       "root": "cypher-shield/client",
       "framework": "vite"
     },
@@ -49,7 +49,7 @@
       "root": "zenith-mesh",
       "framework": "fastapi"
     },
-    "client-2": {
+    "zenith-client": {
       "root": "zenith-mesh/client",
       "framework": "vite"
     }
