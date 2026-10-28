@@ -3,7 +3,8 @@
   "services": {
     "app": {
       "root": ".",
-      "framework": "vite"
+      "framework": "vite",
+      "installCommand": "pnpm install --no-frozen-lockfile"
     },
     "backend": {
       "root": "ai-autonomous-agent/quantumshield-ai/backend",
