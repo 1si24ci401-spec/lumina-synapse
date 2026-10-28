@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import AegisIntroSplash from './components/AegisIntroSplash'
 import LoginPage from './components/LoginPage'
 import LuminaAuth from './components/LuminaAuth'
 import SynapseOS from './components/SynapseOS'
@@ -9,7 +10,7 @@ import { supabase } from './lib/supabase'
 type Credentials = { userId: string; password: string }
 
 export default function App() {
-  const [phase, setPhase] = useState<'login' | 'lumina' | 'workspace'>('login')
+  const [phase, setPhase] = useState<'intro' | 'login' | 'lumina' | 'workspace'>('intro')
   const [credentials, setCredentials] = useState<Credentials | null>(null)
   const [isHoneypot, setIsHoneypot] = useState(false)
   const [auditOpen, setAuditOpen] = useState(false)
@@ -21,6 +22,10 @@ export default function App() {
     setCredentials(null)
     setIsHoneypot(false)
     setPhase('login')
+  }
+
+  if (phase === 'intro') {
+    return <AegisIntroSplash onEnter={() => setPhase('login')} />
   }
 
   if (phase === 'login')
